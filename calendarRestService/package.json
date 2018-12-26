@@ -1,0 +1,14 @@
+{
+  "name": "calendar-rest-service",
+  "version": "0.0.0",
+  "description": "calendarRestService",
+  "scripts": {
+    "start": "node server"
+  },
+  "engines": {
+    "node": "~6.10.x"
+  },
+  "author": {
+    "name": ""
+  }
+}

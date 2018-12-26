@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "calendarRestService", "calendarRestService\calendarRestService.njsproj", "{349FD14A-C0EA-494B-9D97-2542718D150E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{349FD14A-C0EA-494B-9D97-2542718D150E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{349FD14A-C0EA-494B-9D97-2542718D150E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{349FD14A-C0EA-494B-9D97-2542718D150E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{349FD14A-C0EA-494B-9D97-2542718D150E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {051E5A23-30D1-4B64-B75F-4067A38F8DD3}
+	EndGlobalSection
+EndGlobal
