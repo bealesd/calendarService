@@ -10,7 +10,7 @@ module.exports = function () {
         return calendarRepo.getCalendarRecords(res)
             .then((result) => {
                 res.writeHead(201, { 'Content-Type': 'text/plain' });
-                res.end(`records: ${result}`);
+                res.end(result);
             })
             .catch((err) => {
                 res.writeHead(400, { 'Content-Type': 'text/plain' });
@@ -19,6 +19,7 @@ module.exports = function () {
     };
 
     this.addOrUpdateCalendarRecord = function (req, res) {
+
         return httpHelper.parseJsonFromRequest(req)
             .then((result) => {
                 if (!this.isValidCalendarRecord(result)) {
@@ -52,7 +53,7 @@ module.exports = function () {
     };
 
     this.calendarRecordHasValidId = function (json) {
-        if (!json.hasOwnProperty('id') || json.id === null || json.id === undefined) {
+        if (!json.hasOwnProperty('id') || json.id === null || json.id === undefined || json.id === '') {
             return false;
         }
         return true;

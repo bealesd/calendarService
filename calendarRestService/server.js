@@ -5,6 +5,10 @@ var calendarService = new cs();
 var port = 8080;
 
 http.createServer(function (request, response) {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE');
+    response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
     if (request.method.toLowerCase() === 'get') {
         calendarService.getCalendarRecords(response);
     }
