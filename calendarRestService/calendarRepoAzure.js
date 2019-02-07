@@ -32,9 +32,10 @@ module.exports = function () {
             storageClient.queryEntities(config.storageTable, query, null, function (error, result, response) {
                 if (error) rej(error);
                 console.log(`2. Ran query operation executed successfully`);
-                var orderResultsByTime = result.entries;
-                console.log(orderResultsByTime);
-                var results = this.parseResults(result.entries);
+                var orderResultsByTime = result.entries.sort(function (a, b) {
+                    return a['time'] === b['time'] ? 0 : a['time'] > b['time'] ? 1 : -1;
+                });
+                var results = this.parseResults(orderResultsByTime);
                 res(JSON.stringify(results));
             }.bind(this));
         }.bind(this));
