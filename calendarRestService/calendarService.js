@@ -1,7 +1,6 @@
 var hh = require('./httpHelper');
 var httpHelper = new hh();
 var cr = require('./calendarRepoAzure');
-//var cr = require('./calendarRepoFs');
 var calendarRepo = new cr();
 calendarRepo.setup();
 
@@ -68,7 +67,7 @@ module.exports = function () {
                 return false;
             }
 
-            else if (json[key].length < 2 || json[key].length > 20) {
+            else if (json[key].length < 1 || json[key].length > 20) {
                 return false;
             }
         }

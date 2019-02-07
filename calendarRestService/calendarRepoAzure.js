@@ -32,6 +32,8 @@ module.exports = function () {
             storageClient.queryEntities(config.storageTable, query, null, function (error, result, response) {
                 if (error) rej(error);
                 console.log(`2. Ran query operation executed successfully`);
+                var orderResultsByTime = result.entries;
+                console.log(orderResultsByTime);
                 var results = this.parseResults(result.entries);
                 res(JSON.stringify(results));
             }.bind(this));
