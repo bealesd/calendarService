@@ -52,24 +52,15 @@ module.exports = function () {
     };
 
     this.calendarRecordHasValidId = function (json) {
-        if (!json.hasOwnProperty('id') || json.id === null || json.id === undefined || json.id === '') {
-            return false;
-        }
-        return true;
+        return json.hasOwnProperty('id') && json.id !== null && json.id !== undefined & json.id !== '';
     };
 
     this.isValidCalendarRecord = function (json) {
-        jsonProperties = ['title', 'who', 'where', 'time', 'date'];
-        for (var i = 0; i < jsonProperties.length; i++) {
-            var key = jsonProperties[i];
-            if (!json.hasOwnProperty(key)) {
-                console.log('property missing');
-                return false;
-            }
-
-            else if (json[key].length < 1 || json[key].length > 20) {
-                return false;
-            }
+        jsonProperties = ['title', 'date'];
+        for (let i = 0; i < jsonProperties.length; i++) {
+            const key = jsonProperties[i];
+            if (!json.hasOwnProperty(key)) return false;
+            else if (json[key].length < 1 || json[key].length > 20) return false;
         }
         return true;
     };

@@ -1,4 +1,3 @@
-const uuidv1 = require('uuid/v1');
 var storage = require('azure-storage');
 var config = require('./config.js');
 var storageClient;
@@ -11,11 +10,11 @@ module.exports = function () {
 
     this.getCalendarRecords = function () {
         return new Promise(function (res, rej) {
-            storageClient.createTableIfNotExists(config.storageTable, function (error, createResult) {
+            storageClient.createTableIfNotExists(config.storageTableLive, function (error, createResult) {
                 if (error) rej();
                 if (createResult.isSuccessful) {
-                    console.log(`1. Create Table operation executed successfully for: ${config.storageTable}\n`);
-                    res();
+                    console.log(`1. Create Table operation executed successfully for: ${config.storageTableLive}\n`);
+                    return res();
                 }
             });
         }).then(function () {
@@ -27,23 +26,22 @@ module.exports = function () {
 
     this.getRecords = function () {
         return new Promise(function (res, rej) {
-            var query = new storage.TableQuery();
-            //.top(5).where('PartitionKey eq ?', 'hometasks');
-            storageClient.queryEntities(config.storageTable, query, null, function (error, result, response) {
+            let query = new storage.TableQuery();
+            storageClient.queryEntities(config.storageTableLive, query, null, function (error, result, response) {
                 if (error) rej(error);
                 console.log(`2. Ran query operation executed successfully`);
-                var orderResultsByTime = result.entries.sort(function (a, b) {
-                    return a['time'] === b['time'] ? 0 : a['time'] > b['time'] ? 1 : -1;
-                });
-                var results = this.parseResults(orderResultsByTime);
+                //var orderResultsByTime = result.entries.sort(function (a, b) {
+                //    return a['date'] === b['date'] ? 0 : a['date'] > b['date'] ? 1 : -1;
+                //});
+                let results = this.parseResults(result.entries);
                 res(JSON.stringify(results));
             }.bind(this));
         }.bind(this));
     };
 
     this.parseResults = function (entries) {
-        var jsonArray = [];
-        for (var i = 0; i < entries.length; i++)
+        let jsonArray = [];
+        for (let i = 0; i < entries.length; i++)
             jsonArray.push(this.parseResult(entries[i]));
         return jsonArray;
     };
@@ -52,30 +50,28 @@ module.exports = function () {
         return {
             id: entry.RowKey._,
             title: entry.title._,
-            who: entry.who._,
-            where: entry.where._,
-            time: entry.time._,
             date: entry.date._
         };
     };
 
     this.addCalendarRecord = function (jsonRecord) {
-        var id = uuidv1();
-        var entity = {
-            PartitionKey: id,
-            RowKey: id,
+        const invertedTimeKey = this.getMaxTimeTicks() - jsonRecord.date;
+        let entity = {
+            PartitionKey: `${invertedTimeKey}`,
+            RowKey: `${invertedTimeKey}`,
             title: jsonRecord.title,
-            who: jsonRecord.who,
-            where: jsonRecord.where,
-            time: jsonRecord.time,
             date: jsonRecord.date
         };
         return this.updateOrReplaceRecord(entity);
     };
 
+    this.getMaxTimeTicks = function () {
+        return (new Date(9999, 12, 31, 23, 59, 59, 9999999)).getTime();
+    };
+
     this.updateOrReplaceRecord = function (entity) {
         return new Promise(function (res, rej) {
-            storageClient.insertOrReplaceEntity(config.storageTable, entity, function (error, result, response) {
+            storageClient.insertOrReplaceEntity(config.storageTableLive, entity, function (error, result, response) {
                 if (!error) {
                     res(entity.RowKey);
                 }
@@ -89,8 +85,6 @@ module.exports = function () {
             PartitionKey: jsonRecord.id,
             RowKey: jsonRecord.id,
             title: jsonRecord.title,
-            who: jsonRecord.who,
-            where: jsonRecord.where,
             time: jsonRecord.time,
             date: jsonRecord.date
         };
@@ -100,7 +94,7 @@ module.exports = function () {
     this.deleteCalendarRecord = function (id) {
         return new Promise(function (res, rej) {
             this.getRecordById(id).then(function (retrievedEntity) {
-                storageClient.deleteEntity(config.storageTable, retrievedEntity, function entitiesQueried(error, result) {
+                storageClient.deleteEntity(config.storageTableLive, retrievedEntity, function entitiesQueried(error, result) {
                     if (error) {
                         rej();
                     }
@@ -112,7 +106,7 @@ module.exports = function () {
 
     this.getRecordById = function (id) {
         return new Promise(function (res, rej) {
-            storageClient.retrieveEntity(config.storageTable, id, id, function (error, result, response) {
+            storageClient.retrieveEntity(config.storageTableLive, id, id, function (error, result, response) {
                 if (error) rej(error);
                 res(result);
             }.bind(this));
