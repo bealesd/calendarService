@@ -31,9 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="calendarRepoAzure.js" />
-    <Compile Include="calendarService.js" />
     <Compile Include="config.js" />
-    <Compile Include="httpHelper.js" />
     <Compile Include="server.js" />
     <Content Include="config.json" />
     <Content Include="Web.config" />
