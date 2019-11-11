@@ -116,7 +116,7 @@ class CalendarRepo {
                     }
                     res(id);
                 });
-            });
+            }.bind(this));
         }.bind(this));
     }
 
